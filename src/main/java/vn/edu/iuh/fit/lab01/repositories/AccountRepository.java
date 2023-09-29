@@ -57,6 +57,31 @@ public class AccountRepository {
         return account;
     }
 
+    public Account get(String email, String pass){
+        Account account = null;
+        System.out.println("ok");
+        try {
+            PreparedStatement ps = connection.prepareStatement("select * from account where email = ? and password = ?");
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            ResultSet rs =  ps.executeQuery();
+            while (rs.next()){
+                AccountStatus status;
+                if(rs.getInt("status") == 1){
+                    status = AccountStatus.ACTIVE;
+                }else if(rs.getInt("status") == 0){
+                    status = AccountStatus.DEACTIVE;
+                }else{
+                    status = AccountStatus.REMOVE;
+                }
+                account = new Account(rs.getString("account_id"), rs.getString("full_name"), rs.getString("password"), rs.getString("email"), rs.getString("phone"), status);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return account;
+    }
+
     public boolean add(Account account){
         int n = 0;
         try {

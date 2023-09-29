@@ -12,14 +12,14 @@
       <h3 class="text-center p-2">Login</h3>
       <div class="p-2">
         <label class="pt-1 pb-1">Email:</label>
-        <input type="text" placeholder="Enter email" class="form-control">
+        <input type="text" placeholder="Enter email" class="form-control" name="Email">
       </div>
       <div class="p-2">
         <label class="pt-1 pb-1">Password:</label>
-        <input type="password" placeholder="Enter password" class="form-control">
+        <input type="password" placeholder="Enter password" class="form-control" name="Pass">
       </div>
       <div class="p-2 mt-3">
-        <button class="btn btn-primary form-control">Login</button>
+        <button class="btn btn-primary form-control" name="action" value="Login">Login</button>
       </div>
     </form>
   </div>

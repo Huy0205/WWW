@@ -56,12 +56,9 @@ public class LogRepository {
     public boolean add(Log log){
         int n = 0;
         try {
-            PreparedStatement ps = connection.prepareStatement("insert into Log(id, account_id, login_time, logout_time, notes) values(?, ?, ?, ?, ?)");
-            ps.setLong(1, log.getId());
-            ps.setString(2, log.getAccount().getId());
-            ps.setString(3, log.getLoginDateTime().toString());
-            ps.setString(4, log.getLogoutDateTime().toString());
-            ps.setString(5, log.getNote());
+            PreparedStatement ps = connection.prepareStatement("insert into Log(account_id, notes) values(?, ?)");
+            ps.setString(1, log.getAccount().getId());
+            ps.setString(2, log.getNote());
             n = ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -75,6 +72,19 @@ public class LogRepository {
             PreparedStatement ps = connection.prepareStatement("update log set notes = ? where id = ?");
             ps.setString(1, log.getNote());
             ps.setLong(2, log.getId());
+            n = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return n > 0;
+    }
+
+    public boolean update(long id, LocalDateTime logoutDateTime){
+        int n = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement("update log set logout_time = ? where id = ?");
+            ps.setString(1, logoutDateTime.toString());
+            ps.setLong(2, id);
             n = ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

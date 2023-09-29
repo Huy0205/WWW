@@ -10,6 +10,11 @@ public class ConnectDB {
 
     public ConnectDB(){
         try {
+            try {
+                Class.forName("org.mariadb.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/www_lab01", "root", "password");
         } catch (SQLException e) {
             throw new RuntimeException(e);
