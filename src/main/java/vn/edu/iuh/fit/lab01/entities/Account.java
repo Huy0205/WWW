@@ -59,6 +59,19 @@ public class Account {
     public Account() {
     }
 
+    public Account(String id, String fullName, String email) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+    }
+
+    public Account(String id, String fullName, String password, String email) {
+        this.id = id;
+        this.fullName = fullName;
+        this.password = password;
+        this.email = email;
+    }
+
     public Account(String id, String fullName, String password, String email, String phone, AccountStatus status) {
         this.id = id;
         this.fullName = fullName;

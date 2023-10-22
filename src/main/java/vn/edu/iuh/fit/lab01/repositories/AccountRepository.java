@@ -59,7 +59,6 @@ public class AccountRepository {
 
     public Account get(String email, String pass){
         Account account = null;
-        System.out.println("ok");
         try {
             PreparedStatement ps = connection.prepareStatement("select * from account where email = ? and password = ?");
             ps.setString(1, email);
@@ -85,13 +84,11 @@ public class AccountRepository {
     public boolean add(Account account){
         int n = 0;
         try {
-            PreparedStatement ps = connection.prepareStatement("insert into account(acount_id, full_name, password, email, phone, status) values(?,?,?,?,?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("insert into account(account_id, full_name, password, email) values(?,?,?,?)");
             ps.setString(1, account.getId());
             ps.setString(2, account.getFullName());
-            ps.setString(3, account.getPassword());
+            ps.setString(3, "123");
             ps.setString(4, account.getEmail());
-            ps.setString(5, account.getPhone());
-            ps.setInt(6, account.getStatus().getValue());
             n = ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -126,13 +123,5 @@ public class AccountRepository {
             throw new RuntimeException(e);
         }
         return n > 0;
-    }
-
-    public static void main(String[] args) {
-        AccountRepository repository = new AccountRepository();
-        ArrayList accounts = repository.getAll();
-        for (int i = 0; i < accounts.size(); i++) {
-            System.out.println(accounts.get(i));
-        }
     }
 }
