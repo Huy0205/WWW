@@ -6,11 +6,12 @@ import vn.edu.iuh.fit.lab01.entities.Role;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GrantAccessRepository {
     private Connection connection;
-    private RoleRepository roleRepository;
-    private AccountRepository accountRepository;
+    private RoleRepository roleRepository = new RoleRepository();
+    private AccountRepository accountRepository = new AccountRepository();
 
     public GrantAccessRepository() {
         connection = ConnectDB.getInstance().getConnection();
@@ -91,5 +92,22 @@ public class GrantAccessRepository {
             throw new RuntimeException(e);
         }
         return n > 0;
+    }
+
+    public ArrayList<GrantAccess> findGrantByAccountId(String id){
+        ArrayList<GrantAccess> listGrantAccess = new ArrayList<GrantAccess>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("select * from grant_access where account_id = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Role role = roleRepository.get(rs.getString("role_id"));
+                Account account = accountRepository.get(rs.getString("account_id"));
+                listGrantAccess.add(new GrantAccess(account, role, rs.getBoolean("is_grant"), rs.getString("note")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listGrantAccess;
     }
 }

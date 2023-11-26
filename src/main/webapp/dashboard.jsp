@@ -14,6 +14,9 @@
 </head>
 
 <body>
+<%
+    Account loginAccount = (Account) request.getAttribute("loginAccount");
+%>
 <div class="container">
     <div class="row">
         <div class="col-3 bg-light pt-5 pb-1">
@@ -22,11 +25,8 @@
             </div>
             <form action="Controller" method="post">
                 <div class="row pt-4">
-                    <h3 class="fw-bold text-center">User</h3>
+                    <h3 class="fw-bold text-center">Hello <%=loginAccount.getFullName()%></h3>
                 </div>
-                <%
-                    Account loginAccount = (Account) request.getAttribute("loginAccount");
-                %>
                 <div class="row pt-4 align-items-center">
                     <div class="col-4">
                         <label class="fw-bold form-label">Acount ID:</label>
@@ -36,7 +36,7 @@
                                 type="text"
                                 name="loginAccId"
                                 disabled
-                                class="form-control border-top-0 border-start-0 border-end-0"
+                                class="form-control"
                                 value="<%=loginAccount.getId()%>"
                         />
                     </div>
@@ -50,7 +50,7 @@
                                 type="text"
                                 name="loginAccFullName"
                                 disabled
-                                class="form-control border-top-0 border-start-0 border-end-0"
+                                class="form-control"
                                 value="<%=loginAccount.getFullName()%>"
                         />
                     </div>
@@ -64,7 +64,7 @@
                                 type="text"
                                 name="loginAccPass"
                                 disabled
-                                class="form-control border-top-0 border-start-0 border-end-0"
+                                class="form-control"
                                 value="<%=loginAccount.getPassword()%>"
                         />
                     </div>
@@ -78,7 +78,7 @@
                                 type="text"
                                 name="loginAccEmail"
                                 disabled
-                                class="form-control border-top-0 border-start-0 border-end-0"
+                                class="form-control"
                                 value="<%=loginAccount.getEmail()%>"
                         />
                     </div>
@@ -97,6 +97,7 @@
             </form>
         </div>
         <div class="col-9">
+
             <form action="Controller" method="post" class="row ps-3 mb-3">
                 <div class="col-12 bg-light p-2">
                     <h3 class="fw-bold text-center">MANAGER USER</h3>
@@ -111,7 +112,8 @@
                     <input type="text" name="email" class="form-control" placeholder="Email" />
                 </div>
                 <div class="col-2 bg-light pb-3">
-                    <button name="action" value="add" class="form-control btn btn-success">Add</button>
+                    <button   name="action" value="add" class="form-control btn btn-success">Add</button>
+                    <input type="hidden" name="loginAccId" class="form-control"   value="<%=loginAccount.getId()%>" placeholder="Full name" />
                 </div>
             </form>
 
@@ -123,11 +125,11 @@
                     <table class="table table-responsive table-hover">
                         <thead>
                         <tr>
-                            <th>Full name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th class="text-center">Full name</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Phone</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -142,12 +144,16 @@
                             <%
                                 String phone = account.getPhone()==null?"":account.getPhone();
                             %>
-                            <td><%=phone%></td>
-                            <td><%=account.getStatus()%></td>
-                            <td>
-                                <button class="btn btn-primary">Grant</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
+                            <td class="text-center"><%=phone%></td>
+                            <td class="text-center"><%=account.getStatus()%></td>
+                            <th class="text-end">
+                                <form action="Controller" method="post">
+                                    <input name="loginAccId" hidden value="<%=loginAccount.getId()%>">
+                                    <input name="accIdInList" hidden value="<%=account.getId()%>">
+                                    <button name="action" value="grant" class="btn btn-primary">Grant</button>
+                                    <button name="action" value="delete" class="btn btn-danger">Delete</button>
+                                </form>
+                            </th>
                         </tr>
                         <%
                             }

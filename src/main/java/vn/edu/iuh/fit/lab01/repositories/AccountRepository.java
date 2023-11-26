@@ -5,6 +5,7 @@ import vn.edu.iuh.fit.lab01.entities.AccountStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccountRepository {
     private Connection connection;
@@ -25,6 +26,30 @@ public class AccountRepository {
                      status = AccountStatus.DEACTIVE;
                 }else{
                      status = AccountStatus.REMOVE;
+                }
+                accounts.add(new Account(rs.getString("account_id"), rs.getString("full_name"), rs.getString("password"), rs.getString("email"), rs.getString("phone"), status));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return accounts;
+    }
+
+    /**
+     * Lấy danh sách tài khoản chưa xóa (trạng thái là 0 hoặc 1)
+     * @return
+     */
+    public List<Account> get(){
+        ArrayList accounts = new ArrayList();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs =  statement.executeQuery("select * from account where status != -1");
+            while (rs.next()){
+                AccountStatus status;
+                if(rs.getInt("status") == 1){
+                    status = AccountStatus.ACTIVE;
+                }else{
+                    status = AccountStatus.DEACTIVE;
                 }
                 accounts.add(new Account(rs.getString("account_id"), rs.getString("full_name"), rs.getString("password"), rs.getString("email"), rs.getString("phone"), status));
             }
@@ -94,6 +119,19 @@ public class AccountRepository {
             throw new RuntimeException(e);
         }
     return n > 0;
+    }
+
+    public boolean update(String accountId, AccountStatus status){
+        int n = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement("update account set status = ? where account_id = ?");
+            ps.setInt(1, status.getValue());
+            ps.setString(2, accountId);
+            n = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return n > 0;
     }
 
     public boolean update(Account account){

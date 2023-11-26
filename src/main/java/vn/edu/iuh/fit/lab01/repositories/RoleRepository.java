@@ -29,7 +29,7 @@ public class RoleRepository {
                 }else{
                     status = RoleStatus.REMOVE;
                 }
-                role = new Role(rs.getString("role_id"), rs.getString("role_name"), rs.getString("discription"), status);
+                role = new Role(rs.getString("role_id"), rs.getString("role_name"), rs.getString("description"), status);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -37,8 +37,8 @@ public class RoleRepository {
         return role;
     }
 
-    public ArrayList getAll(){
-        ArrayList roles = new ArrayList();
+    public ArrayList<Role> getAll(){
+        ArrayList<Role> roles = new ArrayList();
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("select * from role");
@@ -51,7 +51,21 @@ public class RoleRepository {
                 }else{
                     status = RoleStatus.REMOVE;
                 }
-                roles.add(new Role(rs.getString("role_id"), rs.getString("role_name"), rs.getString("discription"), status));
+                roles.add(new Role(rs.getString("role_id"), rs.getString("role_name"), rs.getString("description"), status));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return roles;
+    }
+
+    public ArrayList<Role> getAllRoleActive(){
+        ArrayList<Role> roles = new ArrayList();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select * from role where status = 1");
+            while (rs.next()){
+                roles.add(new Role(rs.getString("role_id"), rs.getString("role_name"), rs.getString("description"), RoleStatus.ACTIVE));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
